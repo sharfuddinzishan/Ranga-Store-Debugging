@@ -1,9 +1,21 @@
+const loaderDiv = document.getElementById('loaderDiv');
 const loadProducts = () => {
   const url = `https://fakestoreapi.com/products`;
+  // Enable Spinner Loading 
+  disabledLoader(0);
   fetch(url)
     .then((response) => response.json())
-    .then((data) => showProducts(data));
+    .then((data) => showProducts(data))
+    .catch(error => serverValidation(error)) // if handleErrors method throw an error
+    .finally(() => {
+      // Disable Spinner When Searching Result Retrived 
+      disabledLoader(1);
+    })
 };
+const disabledLoader = action => {
+  action ? loaderDiv.classList.toggle('d-none', true) : loaderDiv.classList.toggle('d-none', false);
+};
+
 loadProducts();
 
 // show all product in UI 
