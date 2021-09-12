@@ -4,7 +4,7 @@ const loadProducts = () => {
   // Enable Spinner Loading 
   disabledLoader(0);
   fetch(url)
-    .then((response) => response.json())
+    .then(handleErrors) // Checked response id OK?
     .then((data) => showProducts(data))
     .catch(error => serverValidation(error)) // if handleErrors method throw an error
     .finally(() => {
@@ -15,8 +15,16 @@ const loadProducts = () => {
 const disabledLoader = action => {
   action ? loaderDiv.classList.toggle('d-none', true) : loaderDiv.classList.toggle('d-none', false);
 };
-
-loadProducts();
+/********************ERROR HANDLING**************************************** */
+// Handle Server Error, if response not retrived
+let handleErrors = response => {
+  if (!response.ok) throw Error(response.statusText);
+  return response.json();
+};
+// Displayed Server Error
+const serverValidation = (errorText) => {
+  noResultDiv.innerHTML = `<span class="h3 text-warning fw-bold">${errorText}</span>`;
+};
 
 // show all product in UI 
 const showProducts = (products) => {
@@ -91,3 +99,5 @@ const updateTotal = () => {
     getInputValue("total-tax");
   document.getElementById("total").innerText = grandTotal;
 };
+
+loadProducts();
