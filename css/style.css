@@ -48,6 +48,9 @@ body {
   width: 150px;
   height: 150px;
 }
+.fa{
+  color: cornflowerblue;
+}
 .cart {
   width: 350px;
   /* border: 1px solid green; */

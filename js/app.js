@@ -75,6 +75,22 @@ const addToCart = itemPrice => {
   document.getElementById("total-Products").innerText = count;
 };
 
+// Rating Display
+const getRating = (ratingAverage) => {
+  ratingAverage = ratingAverage || 0;
+  let iconRating = ``;
+  let count = Math.floor(ratingAverage);
+  while (count > 0) {
+    iconRating += `<i class="fa fa-star"></i>`
+    count--
+  }
+  // Check Average Rating is integer or not 
+  if (!Number.isInteger(ratingAverage)) {
+    iconRating += `<i class="fa fa-star-half"></i>`
+  }
+  return iconRating
+}
+
 // show all product in UI 
 const showProducts = (products) => {
   for (const product of products) {
@@ -91,8 +107,13 @@ const showProducts = (products) => {
       <h3>${product?.title}</h3>
       <p>Category: ${product?.category}</p>
       <h2>Price: $ ${product?.price}</h2>
-      <p><small>Average Rating: ${product?.rating?.rate}</small></p>
-      <p><small>Total Rating: ${product?.rating?.count}</small></p>
+      <div class="stars"> 
+        ${getRating(product?.rating?.rate)}
+      </div>
+      <small class="rating">
+        <span class="rating-rate">(${product?.rating?.rate}</span> Average Rating - 
+        <span class="rating-count">${product?.rating?.count}</span> Ratings)
+      </small>
       <button onclick="addToCart(${product?.price})" 
       id="addToCart-btn" class="buy-now btn btn-success">
         add to cart
