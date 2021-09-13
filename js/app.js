@@ -102,23 +102,23 @@ const showProducts = (products) => {
     div.innerHTML = `
     <div class="single-product">
       <div>
-        <img class="product-image" src=${image} alt=${product.title}>
+        <img class="product-image p-2" src=${image} alt=${product.title}>
       </div>
-      <h3>${product?.title}</h3>
+      <h5>${product?.title}</h5>
       <p>Category: ${product?.category}</p>
       <h2>Price: $ ${product?.price}</h2>
-      <div class="stars"> 
+      <div class="stars mb-2"> 
         ${getRating(product?.rating?.rate)}
       </div>
-      <small class="rating">
+      <small class="rating mb-2 d-inline-block">
         <span class="rating-rate">(${product?.rating?.rate}</span> Average Rating - 
         <span class="rating-count">${product?.rating?.count}</span> Ratings)
       </small>
       <button onclick="addToCart(${product?.price})" 
-      id="addToCart-btn" class="buy-now btn btn-success">
+      id="addToCart-btn" class="buy-now btn btn-sm btn-success">
         add to cart
       </button>
-      <button id="details-btn" class="btn btn-danger">
+      <button id="details-btn" class="btn btn-sm btn-danger">
         Details
       </button>
     </div>`;
