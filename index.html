@@ -26,9 +26,10 @@
         <div class="col-10 col-sm-6 mx-auto">
           <h2 class="text-success fw-bold p-1 text-center">Search Your Desired Products</h2>
           <div class="input-group">
-            <input type="text" class=" form-control" placeholder="Search Products Here......" id="input-field">
+            <input type="text" class=" form-control" placeholder="Search Products Here......" id="input-field"
+              onkeyup="searchProducts()">
             <button class="btn btn-info rounded-end text-light fw-bold" type="button" id="search-btn"
-              onclick="loadProducts()">Search</button>
+              onclick="searchProducts()">Search</button>
           </div>
         </div>
       </div>
