@@ -4,19 +4,36 @@ const loadProducts = () => {
   showProducts(data);
 };
 
+const noResultDiv = document.getElementById('noResultDiv');
+// Displayed message if No Data Found 
+const setNoDataValidation = (action, searchText = "") => {
+  if (action) {
+    noResultDiv.innerHTML = `
+    <span class="h3 text-danger fw-bold">No results found.</span>
+    <span class="ms-1 h3 text-info">Search for products containing the phrase "${searchText}"?</span>
+    `;
+  }
+  else {
+    noResultDiv.innerHTML = '';
+  }
+};
+
 // Search Products
 const searchProducts = () => {
   const getItems = document.querySelectorAll('.product');
   const inputFieldValue = document.querySelector('#input-field').value.toLowerCase();
+  let searchedMatchCount = 0;
   getItems.forEach((singleItem) => {
     let itemTitle = singleItem.firstElementChild.children[1].innerText.toLowerCase();
     if (itemTitle.includes(inputFieldValue)) {
-      singleItem.style.display = 'block'
+      singleItem.style.display = 'block';
+      searchedMatchCount++;
     }
     else {
-      singleItem.style.display = 'none'
+      singleItem.style.display = 'none';
     }
   })
+  searchedMatchCount ? setNoDataValidation(false) : setNoDataValidation(true, inputFieldValue);
 }
 
 // get input data from element by ID attribute
