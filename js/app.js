@@ -51,7 +51,10 @@ const updateTotal = () => {
 
 // set innerText function
 const setInnerText = (elementId, value) => {
-  document.getElementById(elementId).innerText = Math.round(value);
+  if (elementId === 'total-tax')
+    document.getElementById(elementId).innerText = value.toFixed(2);
+  else
+    document.getElementById(elementId).innerText = value;
 };
 
 // update delivery charge and total Tax
