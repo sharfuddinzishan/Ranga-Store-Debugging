@@ -96,31 +96,39 @@ const showProducts = (products) => {
   for (const product of products) {
     const image = product.image;
     const div = document.createElement("div");
-    div.classList.add("product");
+    div.className = "col product";
     // Unique ID generated Dynamically by id of each product
     div.setAttribute("id", `product-${product.id}`);
     div.innerHTML = `
-    <div class="single-product">
-      <div>
-        <img class="product-image p-2" src=${image} alt=${product.title}>
+    <div class="card h-100 single-product">
+      <img src="${image}" width="150px" height="150px" class="pt-2 mx-auto" alt="No Image Found"
+      title=${product.title}>
+      <div class="card-body">
+        <h3 class="card-title fw-bold fs-6 lh-1">
+          ${product.title}
+        </h3>
+        <p>Category:
+          <span class="fst-italic">${product?.category}</span>
+        </p>
+        <h2 class="text-center fs-4 fw-bold">Price: $ ${product?.price}</h2>
+        <div class="rating fw-bold mb-2 text-center">
+          <div class="text-info d-flex justify-content-center align-items-center gap-2" title="Average Rating">
+            <div>
+              ${getRating(product?.rating?.rate)}
+            </div>
+            <div class="fs-4">(${product?.rating?.rate})</div>
+          </div>
+          <small>Rating Count: (${product?.rating?.count})</small>
+        </div>
       </div>
-      <h5>${product?.title}</h5>
-      <p>Category: ${product?.category}</p>
-      <h2>Price: $ ${product?.price}</h2>
-      <div class="stars mb-2"> 
-        ${getRating(product?.rating?.rate)}
+      <div class="card-footer d-flex justify-content-center gap-2">
+        <button onclick="addToCart(${product?.price})" id="addToCart-btn" class="btn btn-sm btn-success">
+          Add to cart
+        </button>
+        <button id="details-btn" class="btn btn-sm btn-danger">
+          Details
+        </button>
       </div>
-      <small class="rating mb-2 d-inline-block">
-        <span class="rating-rate">(${product?.rating?.rate}</span> Average Rating - 
-        <span class="rating-count">${product?.rating?.count}</span> Ratings)
-      </small>
-      <button onclick="addToCart(${product?.price})" 
-      id="addToCart-btn" class="buy-now btn btn-sm btn-success">
-        add to cart
-      </button>
-      <button id="details-btn" class="btn btn-sm btn-danger">
-        Details
-      </button>
     </div>`;
     // Append With Div all-products 
     document.getElementById("all-products").appendChild(div);
