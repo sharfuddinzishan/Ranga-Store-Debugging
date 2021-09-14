@@ -112,7 +112,7 @@ const showProducts = (products) => {
         </p>
         <h2 class="text-center fs-4 fw-bold">Price: $ ${product?.price}</h2>
         <div class="rating fw-bold mb-2 text-center">
-          <div class="text-info d-flex justify-content-center align-items-center gap-2" title="Average Rating">
+          <div class="text-info d-flex flex-column flex-sm-row justify-content-center align-items-center gap-2" title="Average Rating">
             <div>
               ${getRating(product?.rating?.rate)}
             </div>
@@ -121,7 +121,7 @@ const showProducts = (products) => {
           <small>Rating Count: (${product?.rating?.count})</small>
         </div>
       </div>
-      <div class="card-footer d-flex justify-content-center gap-2">
+      <div class="card-footer d-flex flex-column flex-sm-row justify-content-center gap-2">
         <button onclick="addToCart(${product?.price})" id="addToCart-btn" class="btn btn-sm btn-success">
           Add to cart
         </button>
