@@ -46,13 +46,13 @@ const getInputValue = (elementId) => {
 //grandTotal update function
 const updateTotal = () => {
   const grandTotal = getInputValue("price") + getInputValue("delivery-charge") + getInputValue("total-tax");
-  document.getElementById("total").innerText = grandTotal.toFixed(2);
+  document.getElementById("total").innerText = grandTotal.toFixed(2).split('.')[1] != 0 ? grandTotal.toFixed(2) : grandTotal.toFixed(0);;
 };
 
 // set innerText function
 const setInnerText = (elementId, value) => {
   if (elementId === 'total-tax')
-    document.getElementById(elementId).innerText = value.toFixed(2);
+    document.getElementById(elementId).innerText = value.toFixed(2).split('.')[1] != 0 ? value.toFixed(2) : value.toFixed(0);
   else
     document.getElementById(elementId).innerText = value;
 };
@@ -83,9 +83,10 @@ const updatePrice = (priceId, itemPrice) => {
   const convertedOldPrice = getInputValue(priceId);
   // Get price of newly added item to cart  
   const convertPrice = parseFloat(itemPrice);
+  // Calculate Total Price except tax and delivery 
   const total = convertedOldPrice + convertPrice;
   // Update Price in cart 
-  document.getElementById(priceId).innerText = total.toFixed(2);
+  document.getElementById(priceId).innerText = total.toFixed(2).split('.')[1] != 0 ? total.toFixed(2) : total.toFixed(0);
 };
 
 // Updated cart when add-to-cart button is clicked 
