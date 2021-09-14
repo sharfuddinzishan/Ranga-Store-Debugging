@@ -24,13 +24,18 @@ const searchProducts = () => {
   const inputFieldValue = document.querySelector('#input-field').value.toLowerCase();
   let searchedMatchCount = 0;
   getItems.forEach((singleItem) => {
-    let itemTitle = singleItem.firstElementChild.children[1].innerText.toLowerCase();
-    if (itemTitle.includes(inputFieldValue)) {
-      singleItem.style.display = 'block';
-      searchedMatchCount++;
-    }
-    else {
-      singleItem.style.display = 'none';
+    let itemTitle = singleItem.firstElementChild.children[1].querySelector('h3').innerText.toLowerCase();
+    // Split string with whitespace seperator 
+    let splitTitle = itemTitle.split(' ');
+    for (let titleText of splitTitle) {
+      if (titleText.includes(inputFieldValue)) {
+        singleItem.style.display = 'block';
+        searchedMatchCount++;
+        break;
+      }
+      else {
+        singleItem.style.display = 'none';
+      }
     }
   })
   searchedMatchCount ? setNoDataValidation(false) : setNoDataValidation(true, inputFieldValue);
