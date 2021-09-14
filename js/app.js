@@ -90,7 +90,7 @@ const getShowDetails = singleProduct => {
   divRow.innerHTML = `
   <div class="col-4">
     <div class="d-flex flex-column align-items-center">
-      <img src="${image}" class="w-75" alt="">
+      <img src="${image}" class="w-75" alt="No Image Found">
       <h3 class="text-danger fw-bolder fs-2">$${price}</h3>
     </div>
   </div>
@@ -110,10 +110,11 @@ const getShowDetails = singleProduct => {
   document.querySelector(".modal-body").appendChild(divRow);
 }
 
-// Show Details as modal dialogue 
+// Show Product Details as modal dialogue 
 const showDetails = productID => {
   // Clearing Modal div content 
   document.querySelector(".modal-body").textContent = "";
+  // Enable Spinner Until Searching Result Retrived 
   disabledLoader(0);
   fetch(`https://fakestoreapi.com/products/${productID}`)
     .then(handleErrors) // Checked response id OK?
