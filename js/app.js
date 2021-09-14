@@ -4,7 +4,23 @@ const loadProducts = () => {
   showProducts(data);
 };
 
+// Commonly Used Element 
+const loaderDiv = document.getElementById('loaderDiv');
 const noResultDiv = document.getElementById('noResultDiv');
+const noModalDiv = document.getElementById('noModalDiv');
+
+/****************************ERROR HANDLING**************************************** */
+// Handle Server Error, if response not retrived
+let handleErrors = response => {
+  if (!response.ok) throw Error(response.statusText);
+  return response.json();
+};
+
+// Displayed Server Error
+const serverValidation = (errorText) => {
+  noModalDiv.innerHTML = `<span class="h3 text-warning fw-bold">${errorText}</span>`;
+};
+
 // Displayed message if No Data Found 
 const setNoDataValidation = (action, searchText = "") => {
   if (action) {
@@ -18,6 +34,12 @@ const setNoDataValidation = (action, searchText = "") => {
   }
 };
 
+// Disable Loader 
+const disabledLoader = action => {
+  action ? loaderDiv.classList.toggle('d-none', true) : loaderDiv.classList.toggle('d-none', false);
+};
+
+/********************************Search Products***************************** */
 // Search Products
 const searchProducts = () => {
   const getItems = document.querySelectorAll('.product');
@@ -39,6 +61,68 @@ const searchProducts = () => {
     }
   })
   searchedMatchCount ? setNoDataValidation(false) : setNoDataValidation(true, inputFieldValue);
+}
+
+/****************************Rating Displayed******************************** */
+// Rating Display
+const getRating = ratingAverage => {
+  ratingAverage = ratingAverage || 0;
+  let iconRating = ``;
+  let count = Math.floor(ratingAverage);
+  while (count > 0) {
+    iconRating += `<i class="fa fa-star"></i>`
+    count--
+  }
+  // Check Average Rating is integer or not 
+  if (!Number.isInteger(ratingAverage)) {
+    iconRating += `<i class="fa fa-star-half"></i>`
+  }
+  return iconRating
+}
+
+/*******************************Modal Displayed*********************************** */
+// Get Details of Single Product and displayed as modal 
+const getShowDetails = singleProduct => {
+  // Destructuring object 
+  let { title, image, price, description, rating: { rate, count } } = singleProduct;
+  let divRow = document.createElement('div');
+  divRow.className = 'row';
+  divRow.innerHTML = `
+  <div class="col-4">
+    <div class="d-flex flex-column align-items-center">
+      <img src="${image}" class="w-75" alt="">
+      <h3 class="text-danger fw-bolder fs-2">$${price}</h3>
+    </div>
+  </div>
+
+  <div class="col-8">
+    <h3 class="fw-bold">${title}</h3>
+    <hr>
+    <div class="d-flex flex-column flex-lg-row justify-content-center align-items-center fw-bold mb-2 text-center">
+      <span>${getRating(rate)}</span>
+      <span class="text-danger fs-2">${rate}
+      <span class="text-muted h6">(${count} Total Rating Count)</span >
+      </span > 
+    </div >
+  <p text-muted text-center>${description}</p>
+  </div >
+  `
+  document.querySelector(".modal-body").appendChild(divRow);
+}
+
+// Show Details as modal dialogue 
+const showDetails = productID => {
+  // Clearing Modal div content 
+  document.querySelector(".modal-body").textContent = "";
+  disabledLoader(0);
+  fetch(`https://fakestoreapi.com/products/${productID}`)
+    .then(handleErrors) // Checked response id OK?
+    .then(data => getShowDetails(data))
+    .catch(error => serverValidation(error)) // if handleErrors method throw an error
+    .finally(() => {
+      // Disable Spinner When Searching Result Retrived 
+      disabledLoader(1);
+    })
 }
 
 // get input data from element by ID attribute
@@ -104,37 +188,21 @@ const addToCart = itemPrice => {
   document.getElementById("total-Products").innerText = count;
 };
 
-// Rating Display
-const getRating = (ratingAverage) => {
-  ratingAverage = ratingAverage || 0;
-  let iconRating = ``;
-  let count = Math.floor(ratingAverage);
-  while (count > 0) {
-    iconRating += `<i class="fa fa-star"></i>`
-    count--
-  }
-  // Check Average Rating is integer or not 
-  if (!Number.isInteger(ratingAverage)) {
-    iconRating += `<i class="fa fa-star-half"></i>`
-  }
-  return iconRating
-}
-
 // show all product in UI 
 const showProducts = (products) => {
   for (const product of products) {
-    const image = product.image;
+    const image = product?.image;
     const div = document.createElement("div");
     div.className = "col product";
     // Unique ID generated Dynamically by id of each product
-    div.setAttribute("id", `product-${product.id}`);
+    div.setAttribute("id", `product-${product?.id}`);
     div.innerHTML = `
     <div class="card h-100 single-product">
       <img src="${image}" width="150px" height="150px" class="pt-2 mx-auto" alt="No Image Found"
-      title=${product.title}>
+      title=${product?.title}>
       <div class="card-body">
         <h3 class="card-title fw-bold fs-6 lh-1">
-          ${product.title}
+          ${product?.title}
         </h3>
         <p>Category:
           <span class="fst-italic">${product?.category}</span>
@@ -154,12 +222,12 @@ const showProducts = (products) => {
         <button onclick="addToCart(${product?.price})" id="addToCart-btn" class="btn btn-sm btn-success">
           Add to cart
         </button>
-        <button id="details-btn" class="btn btn-sm btn-danger">
+        <button id="details-btn" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalId" onclick="showDetails(${product?.id})">
           Details
         </button>
       </div>
     </div>`;
-    // Append With Div all-products 
+    // Append in all-products div
     document.getElementById("all-products").appendChild(div);
   }
 };
